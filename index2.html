@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <style>
+        .product-box {
+            border: 2px solid rgb(53, 113, 243);
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .add-to-cart-btn, .remove-from-cart-btn {
+            background-color: rgb(53, 113, 243);
+            color: black;
+            padding: 5px 10px;
+            margin: 5px 10px;
+            border: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<center>
+<div id="cosmetics">
+    <h2>Cosmetics</h2>
+</div>
+<hr>
+<div id="household">
+    <h2>Household</h2>
+</div>
+</center>
+<script>
+    const jsonData = {
+        "data": [
+            {
+                "name": "Cosmetics",
+                "productList": [
+                    {
+                        "name": "Hair Oil",
+                        "price": 122
+                    },
+                    {
+                        "name": "Face wash",
+                        "price": 123
+                    }
+                ]
+            },
+            {
+                "name": "Household",
+                "productList": [
+                    {
+                        "name": "Hair Oil",
+                        "price": 122
+                    },
+                    {
+                        "name": "Face wash",
+                        "price": 123
+                    }
+                ]
+            }
+        ]
+    };
+
+    const cart = [];
+
+    function renderProductBox(category, product) {
+        const productBox = document.createElement("div");
+        productBox.className = "product-box";
+        productBox.innerHTML = `
+            <p>Name: ${product.name}</p>
+            <p>Price: $${product.price}</p>
+            <button class="add-to-cart-btn" onclick="addToCart('${category}', '${product.name}')">Add to Cart</button>
+            <button class="remove-from-cart-btn" onclick="removeFromCart('${category}', '${product.name}')">Remove from Cart</button>
+        `;
+        return productBox;
+    }
+
+    function renderProducts() {
+        const cosmeticsDiv = document.getElementById("cosmetics");
+        const householdDiv = document.getElementById("household");
+
+        jsonData.data.forEach(category => {
+            const categoryDiv = category.name === "Cosmetics" ? cosmeticsDiv : householdDiv;
+            const productList = category.productList;
+
+            productList.forEach(product => {
+                const productBox = renderProductBox(category.name, product);
+                categoryDiv.appendChild(productBox);
+            });
+        });
+    }
+
+    function addToCart(category, productName) {
+        const product = jsonData.data.find(category => category.name === category).productList.find(product => product.name === productName);
+        cart.push(product);
+        console.log(`Product "${productName}" added to the cart.`);
+        console.log("List of products in the cart:", cart);
+    }
+
+    function removeFromCart(category, productName) {
+        const index = cart.findIndex(product => product.name === productName);
+        if (index !== -1) {
+            cart.splice(index, 1);
+            console.log(`Product "${productName}" removed from the cart.`);
+            console.log("List of products in the cart:", cart);
+        }
+    }
+
+    renderProducts();
+</script>
+
+</body>
+</html>
